@@ -1,0 +1,144 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity;
+@using WebApplication3.Model;
+@using Microsoft.AspNetCore.DataProtection;
+@inject SignInManager<ApplicationUser> SignInManager;
+@inject UserManager<ApplicationUser> UserManager;
+@inject IHttpContextAccessor contxt;
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    var user = await UserManager.GetUserAsync(User);
+
+    var dataProtectionProvider = DataProtectionProvider.Create("EncryptData");
+    var protector = dataProtectionProvider.CreateProtector("MySecretKey");
+    var creditcardnumber = protector.Unprotect(user.CreditCardNo);
+
+}
+<head>
+    <style>
+        .inf-content{
+    border:1px solid #DDDDDD;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+    box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
+}			                                    
+    </style>
+</head>
+
+<ul>
+ <li> Session id: @contxt.HttpContext.Session.GetString("username")</li>
+ </ul>
+
+
+
+@if (SignInManager.IsSignedIn(User)){
+    <h1 class="display-4">Welcome @(user.FullName)</h1>
+
+    <div class="container bootstrap snippets bootdey">
+        <div class="panel-body inf-content">
+            <div class="row">
+                <div class="col-md-4">
+                    <img alt="" style="width:600px;" title="" class="rounded-circle img-thumbnail isTooltip" src="@user.Photo" data-original-title="Usuario">
+                    <ul title="Ratings" class="list-inline ratings text-center">
+                        <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <strong>Information</strong><br>
+                    <div class="table-responsive">
+                        <table class="table table-user-information">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span class="glyphicon glyphicon-user  text-primary"></span>
+                                            Full Name
+                                        </strong>
+                                    </td>
+                                    <td class="text-primary">
+                                        @user.FullName
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span class="glyphicon glyphicon-usd  text-primary"></span>
+                                            Credit Card Number
+                                        </strong>
+                                    </td>
+                                    <td class="text-primary">
+                                        @creditcardnumber
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span class="glyphicon glyphicon-asterisk  text-primary"></span>
+                                            Gender
+                                        </strong>
+                                    </td>
+                                    <td class="text-primary">
+                                        @user.Gender
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span class="glyphicon glyphicon-earphone  text-primary"></span>
+                                            Mobile Number
+                                        </strong>
+                                    </td>
+                                    <td class="text-primary">
+                                        @user.MobileNumber
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span class="glyphicon glyphicon-map-marker  text-primary"></span>
+                                            Delivery Address
+                                        </strong>
+                                    </td>
+                                    <td class="text-primary">
+                                        @user.Address
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span class="glyphicon glyphicon-envelope text-primary"></span>
+                                            Email
+                                        </strong>
+                                    </td>
+                                    <td class="text-primary">
+                                        @user.Email
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>
+                                                <span class="glyphicon glyphicon-comment text-primary"></span>
+                                            About Me
+                                        </strong>
+                                    </td>
+                                    <td class="text-primary">
+                                        @user.AboutMe
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

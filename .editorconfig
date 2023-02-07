@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# SA1137: Elements should have the same indentation
+dotnet_diagnostic.SA1137.severity = none
